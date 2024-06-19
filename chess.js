@@ -1,37 +1,45 @@
 const { Chess } = require('chess.js')
 const rl = require('readline')
 
-// Cria um novo jogo de xadrez
 const game = new Chess()
 
-// Função para imprimir o tabuleiro
-function printBoard() {
+function printBoard(){
     console.log(game.ascii())
 }
 
-// Função para processar o movimento do jogador
-function makeMove(move) {
-    try {
+printBoard()
+
+function makeMove(move){
+    try{
         game.move(move)
-        console.log('Movimento válido, tabuleiro atual:')
-    } catch (error) {
-        console.error('Erro ao processar movimento:', error.message)
+        console.log('Movimento feito: ')
+    }catch(err){
+        console.error("Erro no movimento: ", err.message)
     }
 }
 
-// Exemplo de loop simples para entrada do jogador
 const readline = rl.createInterface({
     input: process.stdin,
     output: process.stdout
 })
 
-function gameLoop() {
-    printBoard()
-    readline.question('Digite seu movimento (ex: e2-e4): ', (move) => {
+function gameLoop(){
+    if(game.isGameOver()){
+        console.clear()
+        printBoard()
+        console.log("\n",game.history())
+
+        return console.log('\n CHECK-MATE e/ou GAME-OVER')
+    }
+    readline.question('\nDigite seu movimento (ex: e2-e4): ', (move)=>{
+        console.clear()
         makeMove(move)
-        gameLoop() // Chamada recursiva para continuar o jogo
+        printBoard()
+        console.log("\n",game.history())
+
+        gameLoop()
     })
+
 }
 
-// Iniciar o loop do jogo
 gameLoop()
