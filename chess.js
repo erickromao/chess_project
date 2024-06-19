@@ -3,8 +3,14 @@ const rl = require('readline')
 
 const game = new Chess()
 
+function colorText(text, colorCode) {
+    return `\x1b[${colorCode}m${text}\x1b[0m`
+}
+
 function printBoard(){
-    console.log(game.ascii())
+    const board = game.ascii()
+    const coloredBoard = board.replace(/ p| r| n| b| q| k/g, (match) => colorText(match, 33))
+    console.log(coloredBoard)
 }
 
 printBoard()
